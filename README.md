@@ -10,15 +10,12 @@ This repository is a standalone skill package that can be installed through the 
 npx skills add https://github.com/arvind3/robot-framework-py-skill --skill robot-framework-py
 ```
 
-## Showcase
+## Explore The Solution
 
-GitHub Pages showcase:
-
-`https://arvind3.github.io/robot-framework-py-skill/`
-
-Engineering blog:
-
-`https://arvind3.github.io/robot-framework-py-skill/engineering-blog.html`
+- Product showcase (what the skill does, value, and concrete usage examples):  
+  `https://arvind3.github.io/robot-framework-py-skill/`
+- Engineering blog (how it was built with Microsoft-aligned skill framework, automated tests, and RALF optimization loop):  
+  `https://arvind3.github.io/robot-framework-py-skill/engineering-blog.html`
 
 ## What This Skill Covers
 
