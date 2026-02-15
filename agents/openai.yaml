@@ -1,0 +1,5 @@
+version: 1
+interface:
+  display_name: Robot Framework (Python)
+  short_description: Build and refactor Robot Framework API and service tests using Python-centric patterns.
+  default_prompt: Create a Robot Framework suite for API testing with reusable resource keywords and deterministic assertions.

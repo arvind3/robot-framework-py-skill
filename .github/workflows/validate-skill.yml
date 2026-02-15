@@ -1,0 +1,37 @@
+name: Validate Skill Package
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate SKILL.md frontmatter
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          text = Path("SKILL.md").read_text(encoding="utf-8")
+          m = re.match(r"^---\n(.*?)\n---\n", text, re.DOTALL)
+          if not m:
+              raise SystemExit("Missing YAML frontmatter block in SKILL.md")
+          fm = m.group(1)
+          if not re.search(r"^name:\s*.+$", fm, re.MULTILINE):
+              raise SystemExit("Missing required frontmatter field: name")
+          if not re.search(r"^description:\s*.+$", fm, re.MULTILINE):
+              raise SystemExit("Missing required frontmatter field: description")
+          print("SKILL.md frontmatter validation passed")
+          PY
+
+      - name: Validate repository has core files
+        shell: bash
+        run: |
+          test -f SKILL.md
+          test -f README.md
+          test -f references/acceptance-criteria.md
