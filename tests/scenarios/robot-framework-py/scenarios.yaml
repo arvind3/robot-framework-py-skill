@@ -1,23 +1,24 @@
 config:
   model: gpt-4
-  max_tokens: 3000
+  max_tokens: 3600
   temperature: 0.2
 
 scenarios:
   - name: hello-world-smoke-suite
     prompt: |
       Create a minimal Robot Framework smoke suite in one .robot file.
-      Use a deterministic assertion and keep it small.
+      Use deterministic assertion and valid sections.
     expected_patterns:
       - '*** Settings ***'
       - '*** Test Cases ***'
       - 'Should Be Equal'
+      - '[Tags]    smoke'
     forbidden_patterns:
+      - '*** Setting ***'
+      - 'assert '
       - 'pytest'
-      - 'unittest'
-      - 'def test_'
     tags:
-      - syntax
+      - basic-usage
       - smoke
     mock_response: |
       ```robotframework
@@ -25,81 +26,59 @@ scenarios:
       Documentation    Minimal smoke suite
 
       *** Test Cases ***
-      Smoke Check
+      Hello World Smoke
+          [Tags]    smoke
           ${actual}=    Set Variable    ok
           Should Be Equal    ${actual}    ok
       ```
 
-  - name: requestslibrary-get-health
+  - name: api-test-suite-requestslibrary-auth-get-post
     prompt: |
-      Build a Robot Framework API test that calls GET /health and validates status and one payload field.
-      Use RequestsLibrary.
+      Create a RequestsLibrary suite for authenticated API tests.
+      Include GET and POST checks and assert status plus JSON fields.
+      Mention installation command for RequestsLibrary.
     expected_patterns:
+      - 'pip install robotframework-requests'
       - 'Library    RequestsLibrary'
       - 'Create Session'
       - 'GET On Session'
-      - 'Should Be Equal As Integers'
-    forbidden_patterns:
-      - 'requests.get('
-      - 'curl '
-    tags:
-      - api
-      - requestslibrary
-    mock_response: |
-      ```robotframework
-      *** Settings ***
-      Library    RequestsLibrary
-
-      *** Variables ***
-      ${BASE_URL}    https://api.example.com
-
-      *** Test Cases ***
-      Health Check
-          Create Session    api    ${BASE_URL}
-          ${resp}=    GET On Session    api    /health
-          Should Be Equal As Integers    ${resp.status_code}    200
-          ${body}=    Set Variable    ${resp.json()}
-          Should Be Equal    ${body}[status]    UP
-      ```
-
-  - name: requestslibrary-post-json
-    prompt: |
-      Create a Robot Framework test that posts JSON to /orders, validates HTTP 201, and checks response order status.
-      Use reusable headers.
-    expected_patterns:
-      - 'Library    RequestsLibrary'
-      - 'Create Dictionary'
       - 'POST On Session'
       - 'Should Be Equal As Integers'
     forbidden_patterns:
-      - 'requests.post('
-      - 'sleep 10'
+      - 'import requests'
+      - 'curl '
+      - 'token=hardcoded'
     tags:
-      - api
       - requestslibrary
+      - api
+      - auth
+      - basic-usage
     mock_response: |
       ```robotframework
       *** Settings ***
+      Documentation    Install with: pip install robotframework-requests
       Library    RequestsLibrary
 
-      *** Variables ***
-      ${BASE_URL}    https://api.example.com
-
       *** Test Cases ***
+      Get Profile
+          Create Session    api    http://localhost:18080
+          ${headers}=    Create Dictionary    Authorization=Bearer ${API_TOKEN}
+          ${resp}=    GET On Session    api    /profile    headers=${headers}
+          Should Be Equal As Integers    ${resp.status_code}    200
+          Should Contain    ${resp.json()}[role]    user
+
       Create Order
-          Create Session    api    ${BASE_URL}
-          ${headers}=    Create Dictionary    Content-Type=application/json
+          ${headers}=    Create Dictionary    Authorization=Bearer ${API_TOKEN}
           ${payload}=    Create Dictionary    sku=RF-001    quantity=2
           ${resp}=    POST On Session    api    /orders    json=${payload}    headers=${headers}
           Should Be Equal As Integers    ${resp.status_code}    201
-          ${body}=    Set Variable    ${resp.json()}
-          Should Be Equal    ${body}[status]    CREATED
+          Should Be Equal    ${resp.json()}[status]    CREATED
       ```
 
-  - name: refactor-duplicated-steps-to-resource
+  - name: resource-file-refactor-common-resource
     prompt: |
-      Refactor duplicated API setup steps into a resource file.
-      Return two files: tests/orders.robot and resources/common.resource.
+      Refactor duplicated suite setup steps into a resource file.
+      Return tests/orders.robot and resources/common.resource.
     expected_patterns:
       - 'tests/orders.robot'
       - 'resources/common.resource'
@@ -108,19 +87,20 @@ scenarios:
     forbidden_patterns:
       - 'TODO'
       - 'FIXME'
+      - 'repeat setup in each test'
     tags:
       - refactor
-      - resources
+      - scalability
     mock_response: |
       `tests/orders.robot`
       ```robotframework
       *** Settings ***
-      Library     RequestsLibrary
+      Library    RequestsLibrary
       Resource    ../resources/common.resource
+      Suite Setup    Open API Session
 
       *** Test Cases ***
       Get Orders
-          Open API Session
           ${resp}=    GET On Session    api    /orders
           Should Be Equal As Integers    ${resp.status_code}    200
       ```
@@ -132,23 +112,27 @@ scenarios:
           Create Session    api    ${BASE_URL}
       ```
 
-  - name: python-module-keyword-library
+  - name: python-keyword-library-module-and-class-style
     prompt: |
-      Create a Python module-based custom Robot Framework keyword library with two keywords:
-      Normalize Text and Is Even Number.
+      Create a custom Python keyword library output with both module style and class style examples.
+      Include two keywords in each style.
+      Return libraries/text_keywords.py and libraries/math_keywords.py.
     expected_patterns:
       - 'from robot.api.deco import keyword'
       - '@keyword("Normalize Text")'
       - '@keyword("Is Even Number")'
-      - 'def normalize_text'
-      - 'def is_even_number'
+      - 'class MathKeywords'
+      - '@keyword("Add Integers")'
+      - '@keyword("Multiply Integers")'
     forbidden_patterns:
       - 'print('
       - 'input('
+      - 'eval('
     tags:
       - python-library
-      - module-style
+      - advanced-feature
     mock_response: |
+      `libraries/text_keywords.py`
       ```python
       from robot.api.deco import keyword
 
@@ -161,22 +145,7 @@ scenarios:
           return int(value) % 2 == 0
       ```
 
-  - name: python-class-keyword-library
-    prompt: |
-      Create a class-based Robot Framework Python keyword library for arithmetic with Add Integers and Multiply Integers.
-    expected_patterns:
-      - 'class MathKeywords'
-      - '@keyword("Add Integers")'
-      - '@keyword("Multiply Integers")'
-      - 'def add_integers'
-      - 'def multiply_integers'
-    forbidden_patterns:
-      - 'global '
-      - 'eval('
-    tags:
-      - python-library
-      - class-style
-    mock_response: |
+      `libraries/math_keywords.py`
       ```python
       from robot.api.deco import keyword
 
@@ -190,10 +159,10 @@ scenarios:
               return int(left) * int(right)
       ```
 
-  - name: operating-system-library-usage
+  - name: standard-library-usage-operatingsystem
     prompt: |
-      Write a Robot Framework test that verifies an environment variable is present and a file exists.
-      Use OperatingSystem keywords.
+      Write a Robot Framework suite that checks an environment variable and verifies a file exists.
+      Use OperatingSystem library keywords.
     expected_patterns:
       - 'Library    OperatingSystem'
       - 'Get Environment Variable'
@@ -202,6 +171,7 @@ scenarios:
     forbidden_patterns:
       - 'os.environ'
       - 'pathlib'
+      - 'bash -c'
     tags:
       - standard-library
       - operating-system
@@ -211,136 +181,74 @@ scenarios:
       Library    OperatingSystem
 
       *** Test Cases ***
-      Verify Runtime Inputs
+      Validate Runtime Prerequisites
           ${token}=    Get Environment Variable    API_TOKEN
           Should Not Be Empty    ${token}
           File Should Exist    ${CURDIR}/../variables/dev.py
       ```
 
-  - name: scalable-suite-tags-variables-setup
+  - name: scale-patterns-tags-variables-suite-setup
     prompt: |
-      Create a scalable Robot Framework suite with suite setup, tags, and variables for API smoke tests.
+      Create a scalable Robot Framework suite using tags, variables, suite setup and teardown,
+      and a reusable resource file.
     expected_patterns:
-      - 'Suite Setup'
-      - '[Tags]'
       - '*** Variables ***'
+      - 'Suite Setup'
+      - 'Suite Teardown'
+      - '[Tags]'
       - 'Resource'
     forbidden_patterns:
       - 'password='
       - 'secret='
+      - 'Sleep    10'
     tags:
       - scalability
-      - tagging
+      - ralf
     mock_response: |
       ```robotframework
       *** Settings ***
-      Library     RequestsLibrary
+      Library    RequestsLibrary
       Resource    ../resources/common.resource
       Suite Setup    Open API Session
+      Suite Teardown    Close API Session
 
       *** Variables ***
-      ${BASE_URL}    https://api.example.com
+      ${BASE_URL}    http://localhost:18080
 
       *** Test Cases ***
-      Ping Service
+      Health Check
           [Tags]    smoke    api
           ${resp}=    GET On Session    api    /health
           Should Be Equal As Integers    ${resp.status_code}    200
       ```
 
-  - name: github-copilot-chat-checkout-suite
+  - name: browserlibrary-async-advanced-flow
     prompt: |
-      In GitHub Copilot Chat, generate Robot Framework tests for checkout API smoke coverage.
-      Return tests/checkout.robot and resources/common.resource with reusable setup keywords.
+      Create a Browser library enterprise test that validates async response handling.
+      Use bounded timeout-based flow and deterministic selectors.
     expected_patterns:
-      - 'tests/checkout.robot'
-      - 'resources/common.resource'
-      - 'Resource    ../resources/common.resource'
-      - 'Create Session'
-      - 'Should Be Equal As Integers'
+      - 'Library    Browser'
+      - 'Promise To'
+      - 'Wait For Response'
+      - 'timeout='
     forbidden_patterns:
-      - 'pytest'
-      - 'playwright'
-      - 'selenium'
+      - 'Sleep    10'
+      - 'Library    SeleniumLibrary'
     tags:
-      - copilot
-      - chat
-      - api
-    mock_response: |
-      `tests/checkout.robot`
-      ```robotframework
-      *** Settings ***
-      Library     RequestsLibrary
-      Resource    ../resources/common.resource
-
-      *** Test Cases ***
-      Checkout Health
-          Open Checkout Session
-          ${resp}=    GET On Session    checkout    /health
-          Should Be Equal As Integers    ${resp.status_code}    200
-      ```
-
-      `resources/common.resource`
-      ```robotframework
-      *** Variables ***
-      ${BASE_URL}    https://api.example.com
-
-      *** Keywords ***
-      Open Checkout Session
-          Create Session    checkout    ${BASE_URL}
-      ```
-
-  - name: github-copilot-edit-refactor-duplication
-    prompt: |
-      Use GitHub Copilot Edit mode to refactor this suite.
-      Move duplicate login and session setup steps into a resource keyword, keep behavior unchanged.
-    expected_patterns:
-      - '*** Keywords ***'
-      - 'Resource'
-      - 'Open'
-      - 'Should Be Equal As Integers'
-    forbidden_patterns:
-      - 'TODO'
-      - 'sleep 30'
-      - 'manual step'
-    tags:
-      - copilot
-      - edit
-      - refactor
+      - browser
+      - advanced-feature
+      - async
     mock_response: |
       ```robotframework
       *** Settings ***
-      Resource    ../resources/common.resource
+      Library    Browser
 
       *** Test Cases ***
-      Get Profile
-          Open Authenticated Session
-          ${resp}=    GET On Session    api    /profile
-          Should Be Equal As Integers    ${resp.status_code}    200
-      ```
-
-  - name: ralf-loop-iteration-improves-assertions
-    prompt: |
-      Apply one RALF optimization loop to this Robot test output:
-      review weak checks, analyze gaps, learn a better assertion approach, and fix the suite.
-    expected_patterns:
-      - 'Should Be Equal As Integers'
-      - 'Should Contain'
-      - '*** Test Cases ***'
-    forbidden_patterns:
-      - 'looks good'
-      - 'no changes needed'
-      - 'skip validation'
-    tags:
-      - optimization
-      - ralf
-      - quality
-    mock_response: |
-      ```robotframework
-      *** Test Cases ***
-      Order Status Validation
-          ${resp}=    GET On Session    api    /orders/42
-          Should Be Equal As Integers    ${resp.status_code}    200
-          ${body}=    Set Variable    ${resp.json()}
-          Should Contain    ${body}[status]    CREATED
+      Browser Async Flow
+          New Browser    chromium    headless=true
+          New Context
+          New Page    data:text/html,<button id='refresh'>Refresh</button>
+          ${promise}=    Promise To    Wait For Response    matcher=**/api/status    timeout=5s
+          Click    id=refresh
+          Wait For    ${promise}
       ```

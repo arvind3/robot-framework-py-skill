@@ -1,81 +1,124 @@
 # Robot Framework Python Skill
 
-Production-ready skill for generating, reviewing, and refactoring **Robot Framework** tests in Python-centric projects.
+Production-ready skill for generating, reviewing, and refactoring **Robot Framework** automation across five enterprise libraries:
 
-This repository is a standalone `SKILL.md` package that can be installed via the Skills CLI and used with coding agents.
+- SeleniumLibrary
+- RequestsLibrary
+- Browser Library (Playwright)
+- AppiumLibrary
+- DatabaseLibrary
 
----
+## What is included
 
-## Why this skill?
-
-This skill helps teams create reliable Robot Framework automation faster, with strong structure and reduced hallucination risk.
-
-- ✅ Valid `.robot` suites and `.resource` files
-- ✅ API testing workflows with `RequestsLibrary`
-- ✅ Reusable keyword design for maintainable suites
-- ✅ Python custom keyword libraries (module + class styles)
-- ✅ Deterministic assertions and anti-hallucination guardrails
-
----
-
-## Install
-
-```bash
-npx skills add https://github.com/arvind3/robot-framework-py-skill --skill robot-framework-py
-```
-
----
-
-## Explore the solution
-
-- **Product showcase** (what the skill does, value proposition, and usage examples):
-  [https://arvind3.github.io/robot-framework-py-skill/](https://arvind3.github.io/robot-framework-py-skill/)
-- **Engineering blog** (how it was built with a Microsoft-aligned skill framework, automated tests, and a RALF optimization loop):
-  [https://arvind3.github.io/robot-framework-py-skill/engineering-blog.html](https://arvind3.github.io/robot-framework-py-skill/engineering-blog.html)
-
----
-
-## Quick usage prompts
-
-Use prompts like these in your coding assistant:
-
-- `Create a Robot Framework smoke suite for a health endpoint.`
-- `Refactor this suite by moving repeated steps into resources/common.resource.`
-- `Write a Python keyword library with Normalize Text and Is Even Number.`
-- `In GitHub Copilot Chat, generate a Robot suite for checkout API smoke tests with reusable resource keywords.`
-
----
+- Updated `SKILL.md` with golden patterns, setup guidance, pitfalls, and do/don'ts for each library.
+- Example suites for each library with:
+  - minimal smoke flow
+  - enterprise-style flow
+  - reusable resource + variable pattern
+- Scenario-driven quality checks and acceptance criteria aligned to Microsoft-style test strategy.
+- RALF (Review–Analyze–Learn–Fix) notes documenting improvement loop outcomes.
 
 ## Repository layout
 
 ```text
 SKILL.md
+CHANGELOG.md
 references/
   acceptance-criteria.md
+.github/skills/robot-framework-py/references/
+  acceptance-criteria.md
 examples/
-  health-check.robot
-  math_keywords.py
-tests/scenarios/robot-framework-py/
-  scenarios.yaml
+  selenium/
+  requests/
+  browser/
+  appium/
+  database/
+tests/
+  scenarios/robot-framework-py/scenarios.yaml
+  quality/test_skill_quality.py
+.github/workflows/ci.yml
 ```
 
----
+## PR test plan (thorough coverage)
 
-## Local validation
+Each PR should satisfy these planned checks:
+
+- **Scenario coverage:** 7 scenarios total
+  - basic usage
+  - error handling
+  - advanced features
+  - mock responses for CI
+- **Quality unit tests:** 4 tests total
+- **Total planned checks per PR:** **11**
+
+
+## Quality process policy (applies to every future change)
+
+This repository enforces a high-stakes quality process on every PR:
+
+- Acceptance criteria must be maintained at:
+  - `.github/skills/robot-framework-py/references/acceptance-criteria.md`
+  - `references/acceptance-criteria.md` (synchronized copy)
+- Scenario coverage must be maintained in `tests/scenarios/robot-framework-py/scenarios.yaml`.
+- PRs must include test evidence for:
+  - `python -m unittest tests.quality.test_skill_quality -v`
+  - `cd tests && pnpm harness robot-framework-py --mock --verbose`
+  - `cd tests && pnpm harness robot-framework-py --ralph --mock --max-iterations 5 --threshold 85`
+
+The PR template (`.github/pull_request_template.md`) and quality tests enforce this policy.
+
+## Run quality checks
 
 ```bash
-# From this repository root
-npx skills add . --skill robot-framework-py --yes --agent codex
+python -m unittest tests.quality.test_skill_quality -v
 ```
 
----
+## Run scenario harness (when harness tooling is available)
 
-## Compatibility
+```bash
+cd tests && pnpm harness robot-framework-py --mock --verbose
+```
 
-- Skills CLI
-- Codex and other agent runtimes that support `SKILL.md`-based packages
+## Run Robot examples (library specific)
 
----
+> Install dependencies first for the libraries you want to execute.
+
+```bash
+# SeleniumLibrary
+pip install robotframework robotframework-seleniumlibrary
+robot examples/selenium/smoke.robot
+
+# RequestsLibrary
+pip install robotframework robotframework-requests
+robot examples/requests/smoke.robot
+
+# Browser Library (Playwright)
+pip install robotframework robotframework-browser
+rfbrowser init
+robot examples/browser/smoke.robot
+
+# AppiumLibrary
+pip install robotframework robotframework-appiumlibrary
+robot examples/appium/smoke.robot
+
+# DatabaseLibrary
+pip install robotframework robotframework-databaselibrary
+robot examples/database/smoke.robot
+```
+
+## Microsoft-style quality strategy
+
+This repository follows an engineering loop that mirrors Microsoft-style skill validation:
+
+1. **Understand + Plan**: map prompts to expected and forbidden patterns.
+2. **Build**: encode reusable resource-driven examples.
+3. **Validate**: run scenario and quality checks in CI.
+4. **Iterate**: execute RALF loop updates and lock in guidance.
+
+## Explore docs
+
+- Product showcase: https://arvind3.github.io/robot-framework-py-skill/
+- Engineering blog: https://arvind3.github.io/robot-framework-py-skill/engineering-blog.html
 
 ## License
 
