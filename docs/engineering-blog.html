@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Engineering Blog | Robot Framework Python Skill</title>
+  <meta name="description" content="How the Robot Framework Python skill was engineered with Microsoft skill framework, automated tests, and RALF optimization.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="ambient-shape ambient-shape-a" aria-hidden="true"></div>
+  <div class="ambient-shape ambient-shape-b" aria-hidden="true"></div>
+
+  <header class="site-header container reveal">
+    <a class="brand" href="./index.html">
+      <span class="brand-mark">RF</span>
+      <span class="brand-text">robot-framework-py-skill</span>
+    </a>
+    <nav class="header-actions">
+      <a class="button button-secondary" href="./index.html">Showcase</a>
+      <a class="button button-secondary" href="https://github.com/arvind3/robot-framework-py-skill">GitHub</a>
+      <a class="button button-primary" href="#install">Install</a>
+    </nav>
+  </header>
+
+  <main>
+    <article class="container article-shell">
+      <p class="kicker reveal">Engineering Blog</p>
+      <h1 class="reveal">Building a high-confidence Robot Framework skill for engineering and business value</h1>
+      <p class="hero-copy reveal">
+        This project was designed to do more than generate test snippets. The objective was to create a reusable engineering asset
+        that improves delivery speed, standardizes automation quality, and reduces downstream defects for product teams.
+      </p>
+
+      <section class="article-section reveal">
+        <h2>Problem we solved</h2>
+        <p>
+          Teams often produce inconsistent Robot Framework suites across repositories, with duplicated setup logic and low-signal assertions.
+          That increases flaky test behavior, code review burden, and maintenance cost. We built a skill package that gives teams a shared
+          playbook for API-focused Robot Framework automation.
+        </p>
+      </section>
+
+      <section class="article-section reveal">
+        <h2>Microsoft skill-creation framework used</h2>
+        <p>
+          We followed a structured lifecycle aligned with Microsoft-style skill engineering patterns:
+        </p>
+        <ol class="article-list">
+          <li><strong>Understand:</strong> define real usage prompts and expected outputs.</li>
+          <li><strong>Plan:</strong> separate reusable guidance, references, and validation artifacts.</li>
+          <li><strong>Build:</strong> implement a precise <code>SKILL.md</code> with deterministic conventions.</li>
+          <li><strong>Validate:</strong> add scenario-driven tests and CI checks for frontmatter and packaging quality.</li>
+          <li><strong>Iterate:</strong> continuously refine prompts, guardrails, and examples from real usage feedback.</li>
+        </ol>
+      </section>
+
+      <section class="article-section reveal">
+        <h2>Automated test cases recommended by Microsoft patterns</h2>
+        <p>
+          We implemented scenario-based harness tests in <code>tests/scenarios/robot-framework-py/scenarios.yaml</code> to verify
+          expected output patterns and block regressions. The suite now covers:
+        </p>
+        <ul class="article-list">
+          <li>Core syntax and deterministic assertion behavior.</li>
+          <li>RequestsLibrary API test generation for GET and POST flows.</li>
+          <li>Resource extraction/refactoring quality checks.</li>
+          <li>Python keyword library generation (module and class styles).</li>
+          <li>GitHub Copilot-focused usage scenarios for chat, edit, and agent workflows.</li>
+        </ul>
+      </section>
+
+      <section class="article-section reveal">
+        <h2>RALF loop for continuous optimization</h2>
+        <p>
+          We use a repeatable <strong>RALF loop</strong> to keep the skill improving:
+        </p>
+        <div class="ralf-grid">
+          <div class="ralf-card">
+            <p class="ralf-title">R — Review</p>
+            <p>Inspect generated outputs and failure reports from real prompts.</p>
+          </div>
+          <div class="ralf-card">
+            <p class="ralf-title">A — Analyze</p>
+            <p>Identify root causes in prompt design, structure guidance, or assertion policy.</p>
+          </div>
+          <div class="ralf-card">
+            <p class="ralf-title">L — Learn</p>
+            <p>Capture new conventions and anti-patterns as explicit skill instructions.</p>
+          </div>
+          <div class="ralf-card">
+            <p class="ralf-title">F — Fix</p>
+            <p>Update SKILL.md, examples, and scenario tests, then re-validate in CI.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="article-section reveal">
+        <h2>Business outcomes this enables</h2>
+        <div class="impact-grid">
+          <article class="impact-card">
+            <h3>Faster release confidence</h3>
+            <p>Test scaffolding moves from hours to minutes for common API flows.</p>
+          </article>
+          <article class="impact-card">
+            <h3>Lower maintenance cost</h3>
+            <p>Standardized patterns reduce duplicated setup code and refactor effort.</p>
+          </article>
+          <article class="impact-card">
+            <h3>Higher quality signal</h3>
+            <p>Deterministic assertions increase trust in automation results for go/no-go decisions.</p>
+          </article>
+          <article class="impact-card">
+            <h3>Reusable team capability</h3>
+            <p>One shared skill package scales across squads using Copilot and other compatible agents.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="article-section reveal" id="install">
+        <h2>Install and start</h2>
+        <div class="install-command">
+          <code id="installCommand">npx skills add https://github.com/arvind3/robot-framework-py-skill --skill robot-framework-py</code>
+          <button id="copyInstallCommand" class="copy-button" type="button">Copy</button>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer container">
+    <p>Engineering rigor with business impact.</p>
+  </footer>
+
+  <script src="./site.js"></script>
+</body>
+</html>
