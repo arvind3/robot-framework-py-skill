@@ -10,6 +10,12 @@ This repository is a standalone skill package that can be installed through the 
 npx skills add https://github.com/arvind3/robot-framework-py-skill --skill robot-framework-py
 ```
 
+## Showcase
+
+GitHub Pages showcase:
+
+`https://arvind3.github.io/robot-framework-py-skill/`
+
 ## What This Skill Covers
 
 - Authoring valid `.robot` suites and `.resource` files

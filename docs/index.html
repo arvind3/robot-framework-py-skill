@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Robot Framework Python Skill</title>
+  <meta name="description" content="Professional Robot Framework (Python) skill for deterministic API and service-level test automation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="ambient-shape ambient-shape-a" aria-hidden="true"></div>
+  <div class="ambient-shape ambient-shape-b" aria-hidden="true"></div>
+
+  <header class="site-header container reveal">
+    <a class="brand" href="https://github.com/arvind3/robot-framework-py-skill">
+      <span class="brand-mark">RF</span>
+      <span class="brand-text">robot-framework-py-skill</span>
+    </a>
+    <nav class="header-actions">
+      <a class="button button-secondary" href="https://github.com/arvind3/robot-framework-py-skill">GitHub</a>
+      <a class="button button-primary" href="#install">Install</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container reveal">
+      <p class="kicker">Agent Skill</p>
+      <h1>Ship reliable Robot Framework tests faster.</h1>
+      <p class="hero-copy">
+        This skill generates consistent, maintainable Robot Framework suites for Python-centric API and service testing.
+        It enforces valid syntax, reusable structure, and deterministic assertions so teams avoid fragile test code.
+      </p>
+
+      <div class="install-card" id="install">
+        <p class="install-label">Install with Skills CLI</p>
+        <div class="install-command" aria-label="Install command">
+          <code id="installCommand">npx skills add https://github.com/arvind3/robot-framework-py-skill --skill robot-framework-py</code>
+          <button id="copyInstallCommand" class="copy-button" type="button">Copy</button>
+        </div>
+        <p class="install-note">Use with Codex and compatible SKILL.md runtimes.</p>
+      </div>
+    </section>
+
+    <section class="container value-section">
+      <h2 class="section-title reveal">Value it brings</h2>
+      <div class="grid-three">
+        <article class="card reveal">
+          <h3>Consistency by default</h3>
+          <p>
+            Produces valid Robot Framework sections and structures tests into suites, resources, libraries, and variables folders.
+          </p>
+        </article>
+        <article class="card reveal">
+          <h3>API-first productivity</h3>
+          <p>
+            Optimized for RequestsLibrary patterns including session reuse, reusable headers, and status plus payload assertions.
+          </p>
+        </article>
+        <article class="card reveal">
+          <h3>Lower review overhead</h3>
+          <p>
+            Enforces deterministic assertions and anti-hallucination guidance, reducing cleanup cycles during code reviews.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container">
+      <h2 class="section-title reveal">Examples</h2>
+      <div class="examples-grid">
+        <article class="example-card reveal">
+          <p class="example-title">Example 1: API health smoke test</p>
+          <p class="prompt-label">Prompt</p>
+          <pre class="prompt-block"><code>Create a Robot Framework API test for GET /health
+with RequestsLibrary and deterministic assertions.</code></pre>
+          <p class="output-label">Output style</p>
+          <pre class="code-block"><code>*** Settings ***
+Library    RequestsLibrary
+
+*** Variables ***
+${BASE_URL}    https://api.example.com
+
+*** Test Cases ***
+Health Check
+    Create Session    api    ${BASE_URL}
+    ${resp}=    GET On Session    api    /health
+    Should Be Equal As Integers    ${resp.status_code}    200</code></pre>
+        </article>
+
+        <article class="example-card reveal">
+          <p class="example-title">Example 2: Python keyword library</p>
+          <p class="prompt-label">Prompt</p>
+          <pre class="prompt-block"><code>Create a class-based custom keyword library with
+Add Integers and Multiply Integers.</code></pre>
+          <p class="output-label">Output style</p>
+          <pre class="code-block"><code>from robot.api.deco import keyword
+
+class MathKeywords:
+    @keyword("Add Integers")
+    def add_integers(self, left: int, right: int) -&gt; int:
+        return int(left) + int(right)
+
+    @keyword("Multiply Integers")
+    def multiply_integers(self, left: int, right: int) -&gt; int:
+        return int(left) * int(right)</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="container workflow-section">
+      <h2 class="section-title reveal">How teams use it</h2>
+      <ol class="workflow-list">
+        <li class="workflow-step reveal">
+          <span class="step-number">1</span>
+          <div>
+            <h3>Install once</h3>
+            <p>Install the skill from GitHub via Skills CLI.</p>
+          </div>
+        </li>
+        <li class="workflow-step reveal">
+          <span class="step-number">2</span>
+          <div>
+            <h3>Prompt naturally</h3>
+            <p>Ask for suites, resources, or Python keyword libraries in plain language.</p>
+          </div>
+        </li>
+        <li class="workflow-step reveal">
+          <span class="step-number">3</span>
+          <div>
+            <h3>Review generated output</h3>
+            <p>Output follows Robot Framework conventions and reusable structure guidance.</p>
+          </div>
+        </li>
+        <li class="workflow-step reveal">
+          <span class="step-number">4</span>
+          <div>
+            <h3>Scale in CI</h3>
+            <p>Reuse generated patterns across smoke, regression, and service-level pipelines.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="container cta-section reveal">
+      <h2>Ready to use the skill?</h2>
+      <p>Start with the install command, then generate production-ready Robot Framework assets in minutes.</p>
+      <div class="cta-actions">
+        <a class="button button-primary" href="https://github.com/arvind3/robot-framework-py-skill">Open Repository</a>
+        <a class="button button-secondary" href="https://skills.sh/">Browse skills.sh</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <p>Built for robust Robot Framework automation workflows.</p>
+  </footer>
+
+  <script src="./site.js"></script>
+</body>
+</html>
