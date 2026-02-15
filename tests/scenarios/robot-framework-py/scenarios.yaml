@@ -7,12 +7,12 @@ scenarios:
   - name: hello-world-smoke-suite
     prompt: |
       Create a minimal Robot Framework smoke suite in one .robot file.
-      Use deterministic assertion and valid sections.
+      Use modern syntax, deterministic assertions, and valid sections.
     expected_patterns:
       - '*** Settings ***'
       - '*** Test Cases ***'
-      - 'Should Be Equal'
       - '[Tags]    smoke'
+      - 'Should Be Equal'
     forbidden_patterns:
       - '*** Setting ***'
       - 'assert '
@@ -20,6 +20,7 @@ scenarios:
     tags:
       - basic-usage
       - smoke
+      - github-copilot
     mock_response: |
       ```robotframework
       *** Settings ***
@@ -28,44 +29,48 @@ scenarios:
       *** Test Cases ***
       Hello World Smoke
           [Tags]    smoke
-          ${actual}=    Set Variable    ok
-          Should Be Equal    ${actual}    ok
+          ${actual}=    Set Variable    hello world
+          Should Be Equal    ${actual}    hello world
       ```
 
   - name: api-test-suite-requestslibrary-auth-get-post
     prompt: |
-      Create a RequestsLibrary suite for authenticated API tests.
-      Include GET and POST checks and assert status plus JSON fields.
-      Mention installation command for RequestsLibrary.
+      Create an enterprise RequestsLibrary suite that validates auth, GET, and POST endpoints.
+      Assert both HTTP status and JSON fields. Mention RequestsLibrary installation.
     expected_patterns:
       - 'pip install robotframework-requests'
       - 'Library    RequestsLibrary'
       - 'Create Session'
       - 'GET On Session'
       - 'POST On Session'
+      - 'Authorization=Bearer ${API_TOKEN}'
       - 'Should Be Equal As Integers'
+      - 'Should Contain'
     forbidden_patterns:
       - 'import requests'
       - 'curl '
-      - 'token=hardcoded'
+      - 'Authorization=Bearer hardcoded-token'
     tags:
+      - basic-usage
       - requestslibrary
       - api
       - auth
-      - basic-usage
     mock_response: |
       ```robotframework
       *** Settings ***
       Documentation    Install with: pip install robotframework-requests
       Library    RequestsLibrary
 
+      *** Variables ***
+      ${BASE_URL}    http://localhost:18080
+
       *** Test Cases ***
       Get Profile
-          Create Session    api    http://localhost:18080
+          Create Session    api    ${BASE_URL}
           ${headers}=    Create Dictionary    Authorization=Bearer ${API_TOKEN}
           ${resp}=    GET On Session    api    /profile    headers=${headers}
           Should Be Equal As Integers    ${resp.status_code}    200
-          Should Contain    ${resp.json()}[role]    user
+          Should Contain    ${resp.json()}    role
 
       Create Order
           ${headers}=    Create Dictionary    Authorization=Bearer ${API_TOKEN}
@@ -77,7 +82,7 @@ scenarios:
 
   - name: resource-file-refactor-common-resource
     prompt: |
-      Refactor duplicated suite setup steps into a resource file.
+      Refactor duplicated setup and auth keywords into a reusable resource file.
       Return tests/orders.robot and resources/common.resource.
     expected_patterns:
       - 'tests/orders.robot'
@@ -89,8 +94,8 @@ scenarios:
       - 'FIXME'
       - 'repeat setup in each test'
     tags:
-      - refactor
       - scalability
+      - refactor
     mock_response: |
       `tests/orders.robot`
       ```robotframework
@@ -114,9 +119,8 @@ scenarios:
 
   - name: python-keyword-library-module-and-class-style
     prompt: |
-      Create a custom Python keyword library output with both module style and class style examples.
-      Include two keywords in each style.
-      Return libraries/text_keywords.py and libraries/math_keywords.py.
+      Create a custom Python keyword library example with static keyword style and class-based keyword style.
+      Include two keywords per style and return libraries/text_keywords.py and libraries/math_keywords.py.
     expected_patterns:
       - 'from robot.api.deco import keyword'
       - '@keyword("Normalize Text")'
@@ -129,8 +133,8 @@ scenarios:
       - 'input('
       - 'eval('
     tags:
-      - python-library
       - advanced-feature
+      - python-library
     mock_response: |
       `libraries/text_keywords.py`
       ```python
@@ -161,8 +165,7 @@ scenarios:
 
   - name: standard-library-usage-operatingsystem
     prompt: |
-      Write a Robot Framework suite that checks an environment variable and verifies a file exists.
-      Use OperatingSystem library keywords.
+      Write a Robot Framework suite using OperatingSystem library to validate environment variables and file existence.
     expected_patterns:
       - 'Library    OperatingSystem'
       - 'Get Environment Variable'
@@ -189,14 +192,15 @@ scenarios:
 
   - name: scale-patterns-tags-variables-suite-setup
     prompt: |
-      Create a scalable Robot Framework suite using tags, variables, suite setup and teardown,
-      and a reusable resource file.
+      Create a scalable Robot Framework suite that demonstrates tagging strategy, variable management,
+      reusable resources, and suite setup/teardown.
     expected_patterns:
       - '*** Variables ***'
       - 'Suite Setup'
       - 'Suite Teardown'
       - '[Tags]'
       - 'Resource'
+      - 'Should Be Equal'
     forbidden_patterns:
       - 'password='
       - 'secret='
@@ -217,38 +221,36 @@ scenarios:
 
       *** Test Cases ***
       Health Check
-          [Tags]    smoke    api
+          [Tags]    smoke    api    regression
           ${resp}=    GET On Session    api    /health
           Should Be Equal As Integers    ${resp.status_code}    200
+          Should Be Equal    ${resp.json()}[status]    UP
       ```
 
-  - name: browserlibrary-async-advanced-flow
+  - name: harness-and-ralph-loop-quality-improvement
     prompt: |
-      Create a Browser library enterprise test that validates async response handling.
-      Use bounded timeout-based flow and deterministic selectors.
+      Document Microsoft Skills Harness execution and Ralph Loop usage for iterative quality improvement.
+      Include first pass and ralph loop commands.
     expected_patterns:
-      - 'Library    Browser'
-      - 'Promise To'
-      - 'Wait For Response'
-      - 'timeout='
+      - 'pnpm harness robot-framework-py --mock --verbose'
+      - 'pnpm harness robot-framework-py --ralph --mock --max-iterations 5 --threshold 85'
+      - 'Generate'
+      - 'Score'
+      - 'Feedback'
+      - 'Regenerate'
+      - 'Repeat'
     forbidden_patterns:
-      - 'Sleep    10'
-      - 'Library    SeleniumLibrary'
+      - 'manual only'
+      - 'one-shot generation'
     tags:
-      - browser
       - advanced-feature
-      - async
+      - ralf
+      - harness
     mock_response: |
-      ```robotframework
-      *** Settings ***
-      Library    Browser
+      Run a first quality pass:
+      `cd tests && pnpm harness robot-framework-py --mock --verbose`
 
-      *** Test Cases ***
-      Browser Async Flow
-          New Browser    chromium    headless=true
-          New Context
-          New Page    data:text/html,<button id='refresh'>Refresh</button>
-          ${promise}=    Promise To    Wait For Response    matcher=**/api/status    timeout=5s
-          Click    id=refresh
-          Wait For    ${promise}
-      ```
+      Then run Ralph Loop optimization:
+      `pnpm harness robot-framework-py --ralph --mock --max-iterations 5 --threshold 85`
+
+      Ralph Loop process: **Generate → Score → Feedback → Regenerate → Repeat**.

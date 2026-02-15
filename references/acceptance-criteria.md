@@ -1,118 +1,126 @@
 # Acceptance Criteria: robot-framework-py
 
+These criteria are written as concrete, checkable rules for generated content, examples, and reviews.
+
 ## Process alignment
 
 This repository keeps acceptance criteria in two locations for compatibility:
-- Canonical repo reference: `references/acceptance-criteria.md`
-- Skill-package reference path: `.github/skills/robot-framework-py/references/acceptance-criteria.md`
+- Canonical reference: `references/acceptance-criteria.md`
+- Skill package path: `.github/skills/robot-framework-py/references/acceptance-criteria.md`
 
-Both files must stay synchronized.
+Both files must remain identical.
 
-## 6) Acceptance criteria (high-stakes-safe)
+## A) Correct Robot Framework syntax
 
-### A) Correct Robot Framework syntax
-
-**Required**
-- Must output valid Robot sections when relevant:
+### Required (pass rules)
+- Output must use valid section headers for `.robot` suites:
   - `*** Settings ***`
-  - `*** Variables ***`
+  - `*** Variables ***` (when variables are used)
   - `*** Test Cases ***`
-  - `*** Keywords ***`
-- Must use `.resource` format when resource output is requested.
-- Must use BuiltIn assertion keywords (`Should Be Equal`, `Should Contain`, `Should Be True`, `Should Not Be Empty`).
+  - `*** Keywords ***` (when custom keywords are present)
+- If output is a resource file, it must be in `.resource` format with valid sections for resource content.
+- Assertions must use BuiltIn keywords, and generated examples must include:
+  - `Should Be Equal`
+  - `Should Contain`
+- Keywords and section names must use canonical Robot Framework spelling.
 
-**Forbidden**
-- `*** Setting ***`
-- `*** TestCase ***`
-- Invented assertion styles or raw Python assertions in `.robot` output.
+### Forbidden (fail rules)
+- Invalid section headers such as:
+  - `*** Setting ***`
+  - `*** TestCase ***`
+- Raw Python assertion styles in `.robot` outputs (`assert x == y`).
+- Invented assertion keywords that are not defined in the same output.
 
-### B) Library correctness
+## B) Library correctness
 
-**Required**
-- If user asks for API testing, prefer RequestsLibrary patterns and mention install command:
+### Required (pass rules)
+- API testing scenarios must prefer RequestsLibrary and include installation guidance:
   - `pip install robotframework-requests`
-- If user asks for OS/file operations, prefer OperatingSystem keywords.
+- OS and file operations must use OperatingSystem library keywords.
+- Library usage must favor official and widely used Robot Framework ecosystem libraries.
 - Library imports must be explicit in `*** Settings ***`.
 
-**Forbidden**
-- `import requests` style Python imports inside Robot suites.
-- Shell snippets as a substitute for OperatingSystem keywords in Robot suites.
+### Forbidden (fail rules)
+- Python `requests` usage inside Robot suite output (`import requests`, `requests.get(...)`).
+- Replacing OperatingSystem keyword usage with shell commands for file checks.
+- Claiming third-party libraries are built-in.
 
-### C) Scalability practices
+## C) Scalability practices
 
-**Required**
-- Promote resource files for reusable keywords.
-- Enforce consistent tagging strategy (`smoke`, `regression`, `api`, etc.).
-- Avoid hard-coded secrets and use variables/environment patterns.
-- Use suite setup/teardown for shared lifecycle steps.
+### Required (pass rules)
+- Reusable logic must be moved into resource files when shared by multiple tests.
+- Suites must include a consistent tagging strategy (for example `smoke`, `regression`, `api`).
+- Credentials/secrets must not be hardcoded; use variable files and/or environment variables.
+- Shared lifecycle operations must be implemented with `Suite Setup` / `Suite Teardown` when appropriate.
+- Examples should separate test intent (test cases) from implementation details (keywords/resources).
 
-**Forbidden**
-- Repeating setup/auth boilerplate in every test case.
-- Inline credentials (`password=`, `secret=`, fixed bearer tokens).
+### Forbidden (fail rules)
+- Inline credentials or tokens in test bodies.
+- Duplicated setup/auth boilerplate in every test case.
+- Unbounded synchronization patterns (for example long static sleeps instead of deterministic checks).
 
-### D) Do-not-hallucinate constraints
+## D) Do-not-hallucinate constraints
 
-**Required**
-- If keyword/library is not in Standard Library or explicitly chosen, label it as optional external.
-- Use known Robot Framework library keywords only.
+### Required (pass rules)
+- If a library is not in Robot Framework standard libraries and not explicitly user-selected, label it as **OPTIONAL external**.
+- Generated content must only use known keywords from imported libraries or explicitly defined custom keywords.
 
-**Forbidden**
-- Presenting unknown or fabricated keywords as built-in.
-- Claiming external library keywords are Standard Library keywords.
+### Forbidden (fail rules)
+- Presenting fabricated keywords as built-in.
+- Stating a non-standard library is part of Robot Framework core.
 
 ## Correct/incorrect import patterns
 
 ### Correct
 - `Library    RequestsLibrary`
+- `Library    OperatingSystem`
 - `Library    SeleniumLibrary`
 - `Library    Browser`
 - `Library    AppiumLibrary`
 - `Library    DatabaseLibrary`
-- `Library    OperatingSystem`
 - `Resource    ../resources/common.resource`
 
 ### Incorrect
 - `import requests` in `.robot` files
 - `Library    requests`
-- Mixing Browser + Selenium imports in a single minimal smoke path
+- Omitting required library import while using its keywords
 
 ## Authentication patterns
 
-### Required patterns
-- Build auth headers/tokens in reusable resource keywords.
-- Read secrets from variables/environment, not inline literals.
-- Validate both positive and negative auth outcomes (e.g., 200 and 401/403).
+### Required
+- Build auth headers in reusable keywords.
+- Read secrets from environment variables or variable files.
+- Validate both status code and critical payload fields.
 
-### Forbidden patterns
-- Inline static credentials in test body (`password=...`, `token=...`).
-- Repeating authentication setup in every test case.
+### Forbidden
+- Hardcoded bearer tokens, passwords, or API keys.
+- Duplicated auth setup in each test case.
 
 ## Async variants
 
-### Required patterns
-- Use bounded waits/timeouts for async behavior.
-- Browser async keywords (for example `Promise To`, `Wait For Response`) should be wrapped in reusable keywords in enterprise examples.
-- Eventual consistency flows use finite retry/poll logic.
+### Required
+- Use bounded waits/timeouts for async flows.
+- Keep async handling logic in reusable keywords/resources.
 
-### Forbidden patterns
-- Unbounded waits.
-- Arbitrary static waits (`Sleep    10`+) for synchronization.
+### Forbidden
+- Arbitrary static waits as the primary synchronization mechanism.
+- Unbounded polling loops.
 
 ## Scenario quality requirements
 
 ### Required
-- `tests/scenarios/robot-framework-py/scenarios.yaml` must include these scenario categories:
-  1. Hello world suite (smoke)
-  2. API test suite (RequestsLibrary): auth, GET/POST, status + JSON checks
-  3. Resource refactor scenario to `resources/common.resource`
-  4. Python keyword library generation (module + class styles)
-  5. OperatingSystem usage (env var + file check)
+- `tests/scenarios/robot-framework-py/scenarios.yaml` must cover:
+  1. Hello world smoke suite
+  2. API suite with RequestsLibrary (auth + GET/POST + status/JSON validation)
+  3. Resource refactor scenario
+  4. Custom Python keyword library (module + class)
+  5. Standard library usage for env/file checks
   6. Scale patterns (tags, variables, suite setup/teardown)
-- Every scenario must include:
+- Each scenario must include:
   - `expected_patterns`
   - `forbidden_patterns`
   - `mock_response`
 
 ### Forbidden
-- Scenarios without deterministic assertions.
-- Scenarios depending on flaky live internet behavior by default.
+- Scenarios without deterministic validation patterns.
+- Scenarios that require flaky public internet dependencies by default.
