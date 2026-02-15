@@ -20,6 +20,7 @@
       <span class="brand-text">robot-framework-py-skill</span>
     </a>
     <nav class="header-actions">
+      <a class="button button-secondary" href="./engineering-blog.html">Engineering Blog</a>
       <a class="button button-secondary" href="https://github.com/arvind3/robot-framework-py-skill">GitHub</a>
       <a class="button button-primary" href="#install">Install</a>
     </nav>
@@ -110,6 +111,33 @@ class MathKeywords:
       </div>
     </section>
 
+    <section class="container copilot-section">
+      <h2 class="section-title reveal">GitHub Copilot use cases</h2>
+      <div class="grid-three">
+        <article class="card reveal">
+          <h3>Copilot Chat: suite generation</h3>
+          <p class="prompt-label">Prompt for Copilot Chat</p>
+          <pre class="prompt-block"><code>Create a Robot Framework suite for checkout API
+smoke tests using RequestsLibrary and reusable resource
+keywords. Return tests/checkout.robot and resources/common.resource.</code></pre>
+        </article>
+        <article class="card reveal">
+          <h3>Copilot Edit: refactor duplicate steps</h3>
+          <p class="prompt-label">Prompt for Copilot Edit</p>
+          <pre class="prompt-block"><code>Refactor repeated login and session setup steps in this
+suite into resource keywords, keep behavior identical,
+and apply deterministic status and payload assertions.</code></pre>
+        </article>
+        <article class="card reveal">
+          <h3>Copilot Agent: Python keyword library</h3>
+          <p class="prompt-label">Prompt for Copilot Agent</p>
+          <pre class="prompt-block"><code>Generate libraries/payment_keywords.py with module-level
+keywords Validate Currency and Compute Tax, including
+type hints and Robot keyword decorators.</code></pre>
+        </article>
+      </div>
+    </section>
+
     <section class="container workflow-section">
       <h2 class="section-title reveal">How teams use it</h2>
       <ol class="workflow-list">
@@ -142,6 +170,15 @@ class MathKeywords:
           </div>
         </li>
       </ol>
+    </section>
+
+    <section class="container blog-highlight reveal">
+      <h2>Engineering story and business impact</h2>
+      <p>
+        Read how the skill was built with Microsoft skill-creation practices, scenario-based automated tests,
+        and a RALF optimization loop to keep quality improving after every usage cycle.
+      </p>
+      <a class="button button-primary" href="./engineering-blog.html">Read Engineering Blog</a>
     </section>
 
     <section class="container cta-section reveal">

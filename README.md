@@ -16,6 +16,10 @@ GitHub Pages showcase:
 
 `https://arvind3.github.io/robot-framework-py-skill/`
 
+Engineering blog:
+
+`https://arvind3.github.io/robot-framework-py-skill/engineering-blog.html`
+
 ## What This Skill Covers
 
 - Authoring valid `.robot` suites and `.resource` files
@@ -29,6 +33,7 @@ GitHub Pages showcase:
 - `Create a Robot Framework smoke suite for a health endpoint.`
 - `Refactor this suite by moving repeated steps into resources/common.resource.`
 - `Write a Python keyword library with Normalize Text and Is Even Number.`
+- `In GitHub Copilot Chat, generate a Robot suite for checkout API smoke tests with reusable resource keywords.`
 
 ## Repository Layout
 

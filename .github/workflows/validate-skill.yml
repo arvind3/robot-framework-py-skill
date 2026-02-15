@@ -35,3 +35,10 @@ jobs:
           test -f SKILL.md
           test -f README.md
           test -f references/acceptance-criteria.md
+          test -f tests/scenarios/robot-framework-py/scenarios.yaml
+
+      - name: Validate scenario coverage markers
+        shell: bash
+        run: |
+          grep -q "github-copilot" tests/scenarios/robot-framework-py/scenarios.yaml
+          grep -q "ralf" tests/scenarios/robot-framework-py/scenarios.yaml

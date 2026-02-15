@@ -247,3 +247,100 @@ scenarios:
           ${resp}=    GET On Session    api    /health
           Should Be Equal As Integers    ${resp.status_code}    200
       ```
+
+  - name: github-copilot-chat-checkout-suite
+    prompt: |
+      In GitHub Copilot Chat, generate Robot Framework tests for checkout API smoke coverage.
+      Return tests/checkout.robot and resources/common.resource with reusable setup keywords.
+    expected_patterns:
+      - 'tests/checkout.robot'
+      - 'resources/common.resource'
+      - 'Resource    ../resources/common.resource'
+      - 'Create Session'
+      - 'Should Be Equal As Integers'
+    forbidden_patterns:
+      - 'pytest'
+      - 'playwright'
+      - 'selenium'
+    tags:
+      - copilot
+      - chat
+      - api
+    mock_response: |
+      `tests/checkout.robot`
+      ```robotframework
+      *** Settings ***
+      Library     RequestsLibrary
+      Resource    ../resources/common.resource
+
+      *** Test Cases ***
+      Checkout Health
+          Open Checkout Session
+          ${resp}=    GET On Session    checkout    /health
+          Should Be Equal As Integers    ${resp.status_code}    200
+      ```
+
+      `resources/common.resource`
+      ```robotframework
+      *** Variables ***
+      ${BASE_URL}    https://api.example.com
+
+      *** Keywords ***
+      Open Checkout Session
+          Create Session    checkout    ${BASE_URL}
+      ```
+
+  - name: github-copilot-edit-refactor-duplication
+    prompt: |
+      Use GitHub Copilot Edit mode to refactor this suite.
+      Move duplicate login and session setup steps into a resource keyword, keep behavior unchanged.
+    expected_patterns:
+      - '*** Keywords ***'
+      - 'Resource'
+      - 'Open'
+      - 'Should Be Equal As Integers'
+    forbidden_patterns:
+      - 'TODO'
+      - 'sleep 30'
+      - 'manual step'
+    tags:
+      - copilot
+      - edit
+      - refactor
+    mock_response: |
+      ```robotframework
+      *** Settings ***
+      Resource    ../resources/common.resource
+
+      *** Test Cases ***
+      Get Profile
+          Open Authenticated Session
+          ${resp}=    GET On Session    api    /profile
+          Should Be Equal As Integers    ${resp.status_code}    200
+      ```
+
+  - name: ralf-loop-iteration-improves-assertions
+    prompt: |
+      Apply one RALF optimization loop to this Robot test output:
+      review weak checks, analyze gaps, learn a better assertion approach, and fix the suite.
+    expected_patterns:
+      - 'Should Be Equal As Integers'
+      - 'Should Contain'
+      - '*** Test Cases ***'
+    forbidden_patterns:
+      - 'looks good'
+      - 'no changes needed'
+      - 'skip validation'
+    tags:
+      - optimization
+      - ralf
+      - quality
+    mock_response: |
+      ```robotframework
+      *** Test Cases ***
+      Order Status Validation
+          ${resp}=    GET On Session    api    /orders/42
+          Should Be Equal As Integers    ${resp.status_code}    200
+          ${body}=    Set Variable    ${resp.json()}
+          Should Contain    ${body}[status]    CREATED
+      ```

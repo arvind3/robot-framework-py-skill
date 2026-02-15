@@ -248,6 +248,14 @@ main section {
   color: var(--ink-soft);
 }
 
+.card .prompt-label {
+  margin-top: 0.7rem;
+}
+
+.card .prompt-block {
+  margin-top: 0.25rem;
+}
+
 .examples-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -337,6 +345,104 @@ main section {
   color: var(--ink-soft);
 }
 
+.blog-highlight {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 1.5rem 1.1rem 1.6rem;
+  box-shadow: var(--shadow);
+}
+
+.blog-highlight h2 {
+  margin: 0 0 0.4rem;
+}
+
+.blog-highlight p {
+  margin: 0 0 0.9rem;
+  color: var(--ink-soft);
+  max-width: 72ch;
+}
+
+.article-shell {
+  padding-top: 2.4rem;
+}
+
+.article-shell h1 {
+  max-width: 20ch;
+}
+
+.article-section {
+  margin-top: 1.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow);
+}
+
+.article-section h2 {
+  margin: 0 0 0.45rem;
+  font-size: clamp(1.3rem, 2vw, 1.65rem);
+}
+
+.article-section p {
+  margin: 0.1rem 0 0;
+  color: var(--ink-soft);
+}
+
+.article-list {
+  margin: 0.65rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.article-list li {
+  margin: 0.35rem 0;
+  color: var(--ink-soft);
+}
+
+.ralf-grid {
+  margin-top: 0.7rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.ralf-card {
+  border: 1px solid #bfd0cc;
+  border-radius: 12px;
+  padding: 0.7rem;
+  background: #f2f8f7;
+}
+
+.ralf-title {
+  margin: 0;
+  font-weight: 700;
+  color: #0e5d57;
+}
+
+.impact-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.impact-card {
+  border: 1px solid #d2d8d1;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.75rem;
+}
+
+.impact-card h3 {
+  margin: 0 0 0.2rem;
+  font-size: 1.02rem;
+}
+
+.impact-card p {
+  margin: 0;
+}
+
 .cta-section {
   text-align: center;
   border: 1px solid var(--line);
@@ -382,6 +488,11 @@ main section {
 @media (max-width: 930px) {
   .grid-three,
   .examples-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ralf-grid,
+  .impact-grid {
     grid-template-columns: 1fr;
   }
 
