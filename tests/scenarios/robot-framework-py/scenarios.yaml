@@ -20,6 +20,7 @@ scenarios:
     tags:
       - basic-usage
       - smoke
+      - github-copilot
     mock_response: |
       ```robotframework
       *** Settings ***
