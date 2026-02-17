@@ -8,6 +8,17 @@ Production-ready skill for generating, reviewing, and refactoring **Robot Framew
 - AppiumLibrary
 - DatabaseLibrary
 
+## Architecture Views
+
+- [Architecture point of view 1 (DeepWiki diagram)](DEEPWIKI_DIAGRAM_URL_TODO) — DeepWiki-style architecture diagram generated from this repository.
+- [Architecture point of view 2 (Google Code Wiki diagram)](GOOGLE_WIKI_DIAGRAM_URL_TODO) — Google Code Wiki-style diagram generated from this repository.
+
+### How to configure these links
+
+- `DEEPWIKI_DIAGRAM_URL_TODO` is a placeholder for the real DeepWiki diagram URL.
+- `GOOGLE_WIKI_DIAGRAM_URL_TODO` is a placeholder for the real Google Code Wiki-style diagram URL.
+- Replace these placeholders directly in the **Architecture Views** section once the final links are available for repository identifier `arvind3/robot-framework-py-skill`.
+
 ## What is included
 
 - Updated `SKILL.md` with golden patterns, setup guidance, pitfalls, and do/don'ts for each library.
